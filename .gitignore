@@ -1,3 +1,3 @@
-*.o 
-envs.exe
-
+*.o
+*.i
+*.exe
