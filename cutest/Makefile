@@ -5,11 +5,12 @@ all : lib
 -include rules.mk
 
 lib : AllTests.o CuTest.o CuTestTest.o	
-	ar -r libcutest.a *.o
-	ranlib libcutest.a
+	ar -r libs/libcutest.a *.o
+	ranlib libs/libcutest.a
 
-tests:
-	gcc -o tests libcutest.a
+tests: lib
+	gcc -o tests libs/libcutest.a
+	tests
 
 clean :
 	rm -f *.o
