@@ -1,32 +1,26 @@
 package fr.imtld.ilog;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 public class Main {
-	public Method getMain(Class<?> cls) throws Exception {
-		
-		int mod = cls.getModifiers();
-		
-		Method m = cls.getDeclaredMethod("main", String[].class);
-		
-		if (cls.equals(Main.class) 
-				&& Modifier.isPublic(mod) && Modifier.isStatic(mod)
-				&& m.getReturnType().equals(Void.TYPE))
-		{
-			return m;
-		}
-		
-		return null;
+	public static void displayClassLoader(Class<?> cls) {
+		ClassLoader cl = cls.getClassLoader();
+		String str = cl==null ? "bootstrap class loader" : cl.getClass().getCanonicalName();
+		System.out.println(str);
 	}
 
 	public void exec(String[] args) throws Exception {
-		Class<?> cls = Class.forName(args[0]);
-		Method meth = getMain(cls);
-		if (meth != null)
-			meth.invoke(null, (Object) null); // no command line arguments
+		File filFolder = new File("../Counter/bin");
+		URL urlFolder = filFolder.toURI().toURL();
+		URL[] urls = new URL [] { urlFolder };
+		URLClassLoader cl = new URLClassLoader(urls);
+		Class<?> cls = cl.loadClass(args[0]);
+		displayClassLoader(cls);
+//		Class<?> cls = Class.forName(args[0]);
 	}
-	
+
 	public static void main(String[] args) throws Exception {
 		new Main().exec(args);
 	}
