@@ -8,7 +8,7 @@ public class Main {
 	}
 
 	public void exec(String[] args) throws Exception {
-		displayClassLoader(String.class);
+		displayClassLoader(Main.class);
 	}
 
 	public static void main(String[] args) throws Exception {
