@@ -1,34 +1,32 @@
 package fr.imtld.ilog;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 public class Main {
-	public static void displayClassLoader(Class<?> cls) {
-		ClassLoader cl = cls.getClassLoader();
-		String str = cl==null ? "bootstrap class loader" : cl.getClass().getCanonicalName();
-		System.out.println(str);
+	public Method getMain(Class<?> cls) throws Exception {
+		
+		int mod = cls.getModifiers();
+		
+		Method m = cls.getDeclaredMethod("main", String[].class);
+		
+		if (cls.equals(Main.class) 
+				&& Modifier.isPublic(mod) && Modifier.isStatic(mod)
+				&& m.getReturnType().equals(Void.TYPE))
+		{
+			return m;
+		}
+		
+		return null;
 	}
-	public void call(Object o, String namMeth) throws Exception {
-	Class<?> cls = o.getClass();
-	String namClass = cls.getCanonicalName();
-	Method m = cls.getMethod(namMeth);
-	System.out.printf("%s#%s()", namClass, namMeth);
-	Object res = m.invoke(o);
-	if (m.getReturnType() != void.class)
-		System.out.printf(" -> %s", res);
-	System.out.println();
-}
 
 	public void exec(String[] args) throws Exception {
-	Class<?> cls = Class.forName(args[0]);
-	Constructor<?> ct = cls.getDeclaredConstructor();
-	Object o = ct.newInstance();
-	call(o, args[1]);
-	call(o, args[2]);
-}
+		Class<?> cls = Class.forName(args[0]);
+		Method meth = getMain(cls);
+		if (meth != null)
+			meth.invoke(null, (Object) null); // no command line arguments
+	}
 	
-
 	public static void main(String[] args) throws Exception {
 		new Main().exec(args);
 	}
