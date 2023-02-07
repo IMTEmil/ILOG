@@ -1,0 +1,1 @@
+javac -d bin src/fr/imtld/ilog/HelloJava.java src/fr/imtld/ilog/Message.java

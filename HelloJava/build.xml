@@ -1,0 +1,12 @@
+<project default="compile" basedir=".">
+
+	<target name="compile">
+		<javac	destdir="bin" includes="**/*.java" srcdir="src" includeantruntime="false" />
+	</target>
+	<target name="run" depends = "compile">
+ 		<java classname="src/fr/imtld/ilog/HelloJava.java" fork="true"> 
+			 <arg value="you"/>
+		</java>
+	</target>
+
+</project>
