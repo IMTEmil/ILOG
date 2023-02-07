@@ -15,7 +15,7 @@ public class Main {
 		File filFolder = new File("../Counter/bin");
 		URL urlFolder = filFolder.toURI().toURL();
 		URL[] urls = new URL [] { urlFolder };
-		URLClassLoader cl = new URLClassLoader(urls, null);
+		URLClassLoader cl = new URLClassLoader(urls);
 		Class<?> cls = cl.loadClass(args[0]);
 		displayClassLoader(cls);
 //		Class<?> cls = Class.forName(args[0]);
