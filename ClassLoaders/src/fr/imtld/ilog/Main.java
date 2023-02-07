@@ -1,5 +1,7 @@
 package fr.imtld.ilog;
 
+import java.util.Scanner;
+
 public class Main {
 	public static void displayClassLoader(Class<?> cls) {
 		ClassLoader cl = cls.getClassLoader();
@@ -8,8 +10,15 @@ public class Main {
 	}
 
 	public void exec(String[] args) throws Exception {
-		displayClassLoader(Main.class);
+		Scanner sc = new Scanner(System.in);
+		String qname = sc.next();
+		Class<?> cls = Class.forName(qname);
+		displayClassLoader(cls);
+		String nameClass = cls.getCanonicalName();
+		System.out.println(nameClass);
+		sc.close();
 	}
+	
 
 	public static void main(String[] args) throws Exception {
 		new Main().exec(args);
