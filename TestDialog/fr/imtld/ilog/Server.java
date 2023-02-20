@@ -3,10 +3,12 @@ package fr.imtld.ilog;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.Executor;
 
 public class Server {
 	ServerSocket sockServer;
 	Thread thread;
+	Executor executor = new FreshThreadExecutor(); // ou CurrentThreadExecutor
 	Runnable runnable = new Runnable() {
 		@Override
 		public void run() {
@@ -15,9 +17,9 @@ public class Server {
 			System.out.printf("%s entering Server#run\n", name);
 			try {
 				sockServer = new ServerSocket(2013);
-				while (true) { // not that infinite ! (because of surrounding try / catch)
-					Socket sock = sockServer.accept(); // exit to IOException if sockServer closed
-					Dialog dlg = new Dialog(sock);
+				while (true) {
+					Socket sock = sockServer.accept();
+					Dialog dlg = new Dialog(sock, executor);
 					dlg.start();
 				}
 			} catch (IOException e) {
@@ -40,7 +42,7 @@ public class Server {
 	public void stop() {
 		if (thread != null) {
 			try {
-				sockServer.close(); // supersedes thread.interrupt()
+				sockServer.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
