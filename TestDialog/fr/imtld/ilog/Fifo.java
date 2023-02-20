@@ -10,9 +10,11 @@ public class Fifo {
 	}
 
 	public void append(Object o) {
-		v[size] = o;
-		size++;
-	}
+                v[size] = o;
+                System.out.println("size : " + size); // probable scheduling here	
+                System.out.println("v : " + v[size]); // probable scheduling here	
+                size++;        
+        }
 
 	public Object get() {
 		if (size == 0)
