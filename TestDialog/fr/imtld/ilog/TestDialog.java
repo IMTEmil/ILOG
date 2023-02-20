@@ -8,12 +8,13 @@ public class TestDialog {
 		String name = thrCur.getName();
 		System.out.printf("%s entering TestDialog#main\n", name);
 		Dialog dlg = new Dialog();
-		Thread thrDlg = new Thread(dlg);
-		thrDlg.start();
-		try {
-			System.in.read(); // blocks waiting for "Enter" key
-			thrDlg.interrupt();
-			thrDlg = new Thread(dlg);			thrDlg.start();
+		dlg.start();		try {
+			System.in.read();
+			dlg.stop(); // stop requested (but not immediately effective)
+			while (! dlg.start()) // start success one stop effective
+				;
+			System.in.read();
+			dlg.stop();
 		} catch (IOException e) {
 		}
 		System.out.printf("%s leaving TestDialog#main\n", name);
