@@ -10,9 +10,11 @@ public class TestDialog {
 		Dialog dlg = new Dialog();
 		Thread thrDlg = new Thread(dlg);
 		thrDlg.start();
-		while (true) {
-			System.out.printf("%s looping in TestDialog#main\n", name);
+		try {
+			System.in.read(); // blocks waiting for "Enter" key
+			thrDlg.interrupt();
+		} catch (IOException e) {
 		}
-//		System.out.printf("%s leaving TestDialog#main\n", name);
+		System.out.printf("%s leaving TestDialog#main\n", name);
 	}
 }
