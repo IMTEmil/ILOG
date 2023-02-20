@@ -5,19 +5,22 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Date;
+import java.util.concurrent.Executor;
 
 public class Dialog {
-	Thread thread;
+	Executor executor;
 	Runnable runnable;
 	Socket sock;
-	public Dialog(Socket sock) {
+	public Dialog(Socket sock, Executor executor) {
 		this.sock = sock;
+		this.executor = executor;
 		runnable = new Runnable() {
 			@Override
 			public void run() {
 				Thread thrCur = Thread.currentThread();
 				String name = thrCur.getName();
 				System.out.printf("%s entering Dialog#run\n", name);
+
 				try {
 					OutputStream os = sock.getOutputStream();
 					PrintWriter pw = new PrintWriter(os, true);
@@ -25,22 +28,13 @@ public class Dialog {
 					pw.close();
 				} catch (IOException e) {
 					e.printStackTrace();
-				}				System.out.printf("%s leaving Dialog#run", name);
-				thread = null;
+				}
+				System.out.printf("%s leaving Dialog#run", name);
 			}
 		};
 	}
-	public boolean start() {
-		if (thread == null) {
-			thread = new Thread(runnable);
-			thread.start();
-			return true;
-		}
-		return false;
-	}
 
-	public void stop() {
-		if (thread != null)
-			thread.interrupt();
+	public void start() {
+		executor.execute(runnable);
 	}
 }
