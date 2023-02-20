@@ -13,7 +13,7 @@ public class TestDialog {
 		try {
 			System.in.read(); // blocks waiting for "Enter" key
 			thrDlg.interrupt();
-		} catch (IOException e) {
+			thrDlg.start();		} catch (IOException e) {
 		}
 		System.out.printf("%s leaving TestDialog#main\n", name);
 	}
