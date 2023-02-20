@@ -6,7 +6,14 @@ public class Consumer implements Runnable {
 		this.fifo = fifo;
 	}
 	public void run() {
+		synchronized(this)
+		{
 		int count=0;
+		try {
+			while (fifo.size == 0) wait();
+		} catch (InterruptedException e) {
+			
+		}
 		while (count < 100) {
 			Object o = fifo.get();
 			if (o != null) {
@@ -16,5 +23,6 @@ public class Consumer implements Runnable {
 			}
 		}
 		System.out.println("consumer ended");
+	}
 	}
 }
